@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Equipment Inventory</title>
+</head>
+
+<body>
+    <header>
+        <h1>IT Equipment Inventory</h1>
+        <p>Manage monitors and docking stations.</p>
+    </header>
+
+    <section>
+        <h2>Equipment type</h2>
+        <li>Monitor</li>
+        <li>Docking station</li>
+    </section>
+
+    <section>
+        <h2>Add equipment</h2>
+        <form action="/equipment" method="POST">
+            <div>
+                <label for="brand">Brand</label>
+
+                <input type="text" id="brand" name="brand">
+                <div>
+                    <label for="deviceType">Equipment type</label>
+                    <select id="deviceType" name="deviceType">
+                        <option value="monitor">Monitor</option>
+                        <option value="docking_station">Docking station</option>
+                    </select>
+
+                    <div>
+                        <label for="serialNumber">Serial number</label>
+                        <input type="text" id="serialNumber" name="serialNumber" required>
+                    </div>
+                    <div>
+                        <label for="assignedTo">Assigned to</label>
+                        <input type="text" id="assignedTo" name="assignedTo" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit">Add equipment</button>
+        </form>
+    </section>
+</body>
+
+</html>
