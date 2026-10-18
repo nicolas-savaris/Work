@@ -36,6 +36,14 @@
                     <div>
                         <label for="serialNumber">Serial number</label>
                         <input type="text" id="serialNumber" name="serialNumber" required>
+
+                        <label for="serialPhoto">Scan serial number</label>
+                        <input type="file" id="serialPhoto" accept="image/*" capture="environment">
+
+                        <div>
+                            <label for="serviceTag">Service Tag (optional)</label>
+                            <input type="text" id="serviceTag" name="serviceTag">
+                        </div>
                     </div>
                     <div>
                         <label for="assignedTo">Assigned to</label>
@@ -46,6 +54,8 @@
             <button type="submit">Add equipment</button>
         </form>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="/script.js"></script>
 </body>
 
 </html>
