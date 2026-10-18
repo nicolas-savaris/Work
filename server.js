@@ -144,12 +144,11 @@ function requireAuth(req, res, next) {
     next();
 }
 
+// Public CSS: required to render the login page.
+app.use("/CSS", express.static(path.join(publicDir, "CSS")));
+
 // Protect the application and its API routes.
 app.use(requireAuth);
-
-// Serve CSS after authentication.
-// The login page uses the same CSS, so allow its stylesheet separately.
-app.use("/css", express.static(path.join(publicDir, "css")));
 
 // Inventory API — authenticated users only
 app.get("/equipment", async (req, res, next) => {
