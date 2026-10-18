@@ -36,3 +36,100 @@ serialPhoto.addEventListener("change", async () => {
     URL.revokeObjectURL(image.src);
   }
 });
+
+
+
+async function loadEquipment() {
+    const tableBody = document.getElementById("equipmentTableBody");
+    const equipmentCount = document.getElementById("equipmentCount");
+    const searchInput = document.getElementById("equipmentSearch");
+
+    let allEquipment = [];
+
+    function renderEquipment(devices) {
+        equipmentCount.textContent =
+            `${devices.length} ${devices.length === 1 ? "device" : "devices"}`;
+
+        tableBody.replaceChildren();
+
+        if (devices.length === 0) {
+            const row = tableBody.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 5;
+            cell.textContent = searchInput.value.trim()
+                ? "No matching equipment found."
+                : "No equipment registered yet.";
+
+            return;
+        }
+
+        devices.forEach((device) => {
+            const row = tableBody.insertRow();
+
+            const values = [
+                device.brand,
+                device.device_type === "docking_station"
+                    ? "Docking station"
+                    : device.device_type,
+                device.serial_number,
+                device.service_tag || "—",
+                device.assigned_to
+            ];
+
+            values.forEach((value) => {
+                const cell = row.insertCell();
+                cell.textContent = value ?? "—";
+            });
+        });
+    }
+
+    function filterEquipment() {
+        const query = searchInput.value.trim().toLowerCase();
+
+        const filteredEquipment = allEquipment.filter((device) => {
+            const searchableValues = [
+                device.brand,
+                device.device_type === "docking_station"
+                    ? "Docking station"
+                    : device.device_type,
+                device.serial_number,
+                device.service_tag,
+                device.assigned_to
+            ];
+
+            return searchableValues.some((value) =>
+                String(value ?? "").toLowerCase().includes(query)
+            );
+        });
+
+        renderEquipment(filteredEquipment);
+    }
+
+    searchInput.addEventListener("input", filterEquipment);
+
+    try {
+        const response = await fetch("/equipment");
+
+        if (!response.ok) {
+            throw new Error("Failed to load equipment");
+        }
+
+        allEquipment = await response.json();
+
+        filterEquipment();
+    } catch (error) {
+        console.error("Error loading equipment:", error);
+
+        tableBody.replaceChildren();
+
+        const row = tableBody.insertRow();
+        const cell = row.insertCell();
+
+        cell.colSpan = 5;
+        cell.textContent = "Unable to load equipment. Please try again.";
+    }
+}
+
+loadEquipment();
+

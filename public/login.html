@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in | IT Equipment Inventory</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a class="brand-mark" href="/">IT<span> / </span>INVENTORY</a>
+            <p class="header-label">SECURE ACCESS</p>
+        </div>
+    </header>
+
+    <main class="container page-content">
+        <section class="form-card">
+            <div class="form-heading">
+                <p class="eyebrow">AUTHORIZED USERS</p>
+                <h1>Sign in</h1>
+                <p>Access the equipment inventory.</p>
+            </div>
+
+            <form action="/login" method="POST">
+                <div class="form-grid">
+                    <div class="form-field form-field-full">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" autocomplete="username" required>
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Sign in →</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

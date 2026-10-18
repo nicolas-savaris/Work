@@ -1,5 +1,7 @@
 import pg from "pg";
 import dotenv from "dotenv";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 
 dotenv.config();
 
@@ -12,5 +14,7 @@ const pool = new Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD
 });
+
+
 
 export default pool;

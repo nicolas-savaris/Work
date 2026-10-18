@@ -4,65 +4,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
     <title>IT Equipment Inventory</title>
 </head>
 
+
 <body>
-    <header>
-        <h1>IT Equipment Inventory</h1>
-        <p>Manage monitors and docking stations.</p>
+    <header class="site-header">
+        <div class="container header-content">
+            <a class="brand-mark" href="/" aria-label="IT Equipment Inventory home">
+                IT<span> / </span>INVENTORY
+            </a>
+            <p class="header-label">EQUIPMENT MANAGEMENT</p>
+        </div>
     </header>
 
-    <section>
-        <h2>Equipment type</h2>
-        <li>Monitor</li>
-        <li>Docking station</li>
-    </section>
+    <main class="container page-content">
+        <section class="page-intro">
+            <p class="eyebrow">TECHNOLOGY & ASSETS</p>
+            <h1>IT Equipment Inventory</h1>
+            <p>Manage monitors and docking stations.</p>
+        </section>
 
-    <section>
-        <h2>Add equipment</h2>
-        <form action="/equipment" method="POST">
-            <div>
-                <label for="brand">Brand</label>
+        <section class="equipment-overview">
+            <h2>Equipment type</h2>
+            <ul class="equipment-types">
+                <li>Monitor</li>
+                <li>Docking station</li>
+            </ul>
+        </section>
 
-                <input type="text" id="brand" name="brand">
-                <div>
-                    <label for="deviceType">Equipment type</label>
-                    <select id="deviceType" name="deviceType">
-                        <option value="monitor">Monitor</option>
-                        <option value="docking_station">Docking station</option>
-                    </select>
+        <section class="form-card">
+            <div class="form-heading">
+                <p class="eyebrow">REGISTER A DEVICE</p>
+                <h2>Add equipment</h2>
+                <p>Enter the equipment details below.</p>
+            </div>
 
-                    <div>
+            <form action="/equipment" method="POST">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="brand">Brand</label>
+                        <input type="text" id="brand" name="brand">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="deviceType">Equipment type</label>
+                        <select id="deviceType" name="deviceType">
+                            <option value="monitor">Monitor</option>
+                            <option value="docking_station">Docking station</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
                         <label for="serialNumber">Serial number</label>
                         <input type="text" id="serialNumber" name="serialNumber" required>
+                    </div>
 
+                    <div class="form-field">
                         <label for="scanType">What do you want to scan?</label>
                         <select id="scanType">
                             <option value="serialNumber">Serial Number</option>
                             <option value="serviceTag">Service Tag</option>
                         </select>
+                    </div>
 
+                    <div class="form-field form-field-full">
                         <label for="serialPhoto">Upload label photo</label>
                         <input type="file" id="serialPhoto" accept="image/*" capture="environment">
-
-                        <div>
-                            <label for="serviceTag">Service Tag (optional)</label>
-                            <input type="text" id="serviceTag" name="serviceTag">
-                        </div>
+                        <p class="field-help">
+                            Select a photo containing a barcode or Data Matrix code.
+                        </p>
                     </div>
-                    <div>
+
+                    <div class="form-field">
+                        <label for="serviceTag">Service Tag <span>(optional)</span></label>
+                        <input type="text" id="serviceTag" name="serviceTag">
+                    </div>
+
+                    <div class="form-field">
                         <label for="assignedTo">Assigned to</label>
                         <input type="text" id="assignedTo" name="assignedTo" required>
                     </div>
                 </div>
+
+                <div class="form-actions">
+                    <button type="submit">Add equipment <span aria-hidden="true">→</span></button>
+                </div>
+            </form>
+        </section>
+
+
+        <section class="inventory-section">
+            <div class="inventory-heading">
+                <div>
+                    <p class="eyebrow">ASSET OVERVIEW</p>
+                    <h2>Equipment inventory</h2>
+                    <p>All registered devices in one place.</p>
+                </div>
+
+                <span id="equipmentCount" class="inventory-count">0 devices</span>
             </div>
-            <button type="submit">Add equipment</button>
-        </form>
-    </section>
+
+
+            <div class="inventory-toolbar">
+                <label class="inventory-search" for="equipmentSearch">
+                    <span aria-hidden="true">⌕</span>
+                    <input type="search" id="equipmentSearch"
+                        placeholder="Search by serial number, Service Tag or assignee..." autocomplete="off">
+                </label>
+            </div>
+
+            <div class="inventory-table-wrapper">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Equipment type</th>
+                            <th>Serial number</th>
+                            <th>Service Tag</th>
+                            <th>Assigned to</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipmentTableBody">
+                        <tr>
+                            <td colspan="5">Loading equipment...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <p>IT Equipment Inventory</p>
+        </footer>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="/js/barcode.bundle.js"></script>
     <script src="/js/script.js"></script>
 </body>
+
 
 </html>
