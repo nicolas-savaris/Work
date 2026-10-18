@@ -37,7 +37,13 @@
                         <label for="serialNumber">Serial number</label>
                         <input type="text" id="serialNumber" name="serialNumber" required>
 
-                        <label for="serialPhoto">Scan serial number</label>
+                        <label for="scanType">What do you want to scan?</label>
+                        <select id="scanType">
+                            <option value="serialNumber">Serial Number</option>
+                            <option value="serviceTag">Service Tag</option>
+                        </select>
+
+                        <label for="serialPhoto">Upload label photo</label>
                         <input type="file" id="serialPhoto" accept="image/*" capture="environment">
 
                         <div>
@@ -55,6 +61,7 @@
         </form>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="/js/barcode.bundle.js"></script>
     <script src="/script.js"></script>
 </body>
 
