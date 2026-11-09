@@ -150,6 +150,14 @@ app.use("/CSS", express.static(path.join(publicDir, "CSS")));
 // Protect the application and its API routes.
 app.use(requireAuth);
 
+// Current authenticated user
+app.get("/api/me", (req, res) => {
+    res.json({
+        username: req.session.username,
+        role: req.session.role
+    });
+});
+
 // Inventory API — authenticated users only
 app.get("/equipment", async (req, res, next) => {
     try {

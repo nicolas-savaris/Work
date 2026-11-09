@@ -10,14 +10,31 @@
 
 
 <body>
+
     <header class="site-header">
         <div class="container header-content">
+
             <a class="brand-mark" href="/" aria-label="IT Equipment Inventory home">
                 IT<span> / </span>INVENTORY
             </a>
-            <p class="header-label">EQUIPMENT MANAGEMENT</p>
+
+            <div class="header-user">
+                <div class="user-info">
+                    <span class="user-name" id="userName">Loading...</span>
+                    <span class="user-role" id="userRole"></span>
+                </div>
+
+                <form action="/logout" method="POST">
+                    <button type="submit" class="logout-button">
+                        <span aria-hidden="true">↪</span>
+                        Logout
+                    </button>
+                </form>
+            </div>
+
         </div>
     </header>
+
 
     <main class="container page-content">
         <section class="page-intro">

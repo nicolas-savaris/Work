@@ -6,6 +6,28 @@ console.log(serialNumber);
 
 const scanType = document.querySelector("#scanType");
 
+async function loadCurrentUser() {
+    try {
+        const response = await fetch("/api/me");
+
+        if (!response.ok) {
+            throw new Error("Unable to load user information");
+        }
+
+        const user = await response.json();
+
+        document.getElementById("userName").textContent = user.username;
+
+        document.getElementById("userRole").textContent =
+            user.role === "admin" ? "Administrator" : "Operator";
+
+    } catch (error) {
+        console.error("User loading error:", error);
+    }
+}
+
+loadCurrentUser();
+
 serialPhoto.addEventListener("change", async () => {
   const photo = serialPhoto.files[0];
 
