@@ -116,6 +116,44 @@ async function loadEquipment() {
 
     let allEquipment = [];
 
+    function updateWarrantyOverview(devices) {
+    let expiredCount = 0;
+    let expiringSoonCount = 0;
+    let validCount = 0;
+
+    const today = new Date();
+
+    const todayUTC = Date.UTC(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
+
+    devices.forEach((device) => {
+        if (!device.warranty_expiry_date) return;
+
+        const warrantyDate = String(device.warranty_expiry_date).slice(0, 10);
+
+        const expiryUTC = Date.parse(`${warrantyDate}T00:00:00Z`);
+
+        const daysRemaining = Math.round(
+            (expiryUTC - todayUTC) / (1000 * 60 * 60 * 24)
+        );
+
+        if (daysRemaining < 0) {
+            expiredCount++;
+        } else if (daysRemaining <= 30) {
+            expiringSoonCount++;
+        } else {
+            validCount++;
+        }
+    });
+
+    document.getElementById("expiredCount").textContent = expiredCount;
+    document.getElementById("expiringSoonCount").textContent = expiringSoonCount;
+    document.getElementById("validCount").textContent = validCount;
+}
+
     function renderEquipment(devices) {
         equipmentCount.textContent =
             `${devices.length} ${devices.length === 1 ? "device" : "devices"}`;
@@ -126,7 +164,7 @@ async function loadEquipment() {
             const row = tableBody.insertRow();
             const cell = row.insertCell();
 
-            cell.colSpan = 6;
+            cell.colSpan = 7;
             cell.textContent = searchInput.value.trim()
                 ? "No matching equipment found."
                 : "No equipment registered yet.";
@@ -137,22 +175,66 @@ async function loadEquipment() {
         devices.forEach((device) => {
             const row = tableBody.insertRow();
 
-            const values = [
+            const warrantyDate = device.warranty_expiry_date
+                ? String(device.warranty_expiry_date).slice(0, 10)
+                : null;
+
+            let warrantyStatus = "No date";
+
+            if (warrantyDate) {
+                const today = new Date();
+
+                const todayUTC = Date.UTC(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate()
+                );
+
+            const expiryUTC = Date.parse(`${warrantyDate}T00:00:00Z`);
+
+            const daysRemaining = Math.round(
+                (expiryUTC - todayUTC) / (1000 * 60 * 60 * 24)
+            );
+
+            if (daysRemaining < 0) {
+                warrantyStatus = "Expired";
+            } else if (daysRemaining <= 30) {
+                warrantyStatus = "Expiring soon";
+            } else {
+                warrantyStatus = "Valid";
+            }
+        }
+
+           const values = [
                 device.brand,
                 device.device_type === "docking_station"
                     ? "Docking station"
                     : device.device_type,
                 device.serial_number,
                 device.service_tag || "—",
-                device.assigned_to, 
-                device.warranty_expiry_date
-        ? String(device.warranty_expiry_date).slice(0, 10).split("-").reverse().join("/")
-        : "—"
+                device.assigned_to,
+                warrantyDate
+                    ? warrantyDate.split("-").reverse().join("/")
+                    : "—",
+                warrantyStatus
             ];
 
-            values.forEach((value) => {
+            values.forEach((value, index) => {
                 const cell = row.insertCell();
-                cell.textContent = value ?? "—";
+
+                if (index === 6) {
+                    const badge = document.createElement("span");
+
+                    badge.classList.add(
+                        "warranty-badge",
+                        `warranty-${warrantyStatus.toLowerCase().replace(" ", "-")}`
+                    );
+
+                    badge.textContent = warrantyStatus;
+                    cell.appendChild(badge);
+                } else {
+                    cell.textContent = value ?? "—";
+                }
             });
         });
     }
@@ -193,7 +275,10 @@ async function loadEquipment() {
 
         allEquipment = await response.json();
 
-        filterEquipment();
+updateWarrantyOverview(allEquipment);
+
+filterEquipment();
+
     } catch (error) {
         console.error("Error loading equipment:", error);
 

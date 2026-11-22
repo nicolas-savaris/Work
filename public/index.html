@@ -129,6 +129,27 @@
                 <span id="equipmentCount" class="inventory-count">0 devices</span>
             </div>
 
+            <div class="warranty-overview">
+
+                <div class="warranty-card warranty-card-expired">
+                    <span class="warranty-card-label">Expired</span>
+                    <strong id="expiredCount">0</strong>
+                    <span class="warranty-card-description">Expired warranties</span>
+                </div>
+
+                <div class="warranty-card warranty-card-expiring">
+                    <span class="warranty-card-label">Expiring soon</span>
+                    <strong id="expiringSoonCount">0</strong>
+                    <span class="warranty-card-description">Within 30 days</span>
+                </div>
+
+                <div class="warranty-card warranty-card-valid">
+                    <span class="warranty-card-label">Valid</span>
+                    <strong id="validCount">0</strong>
+                    <span class="warranty-card-description">More than 30 days</span>
+                </div>
+
+            </div>
 
             <div class="inventory-toolbar">
                 <label class="inventory-search" for="equipmentSearch">
@@ -148,11 +169,12 @@
                             <th>Service Tag</th>
                             <th>Assigned to</th>
                             <th>Warranty Expiry</th>
+                            <th>Warranty Status</th>
                         </tr>
                     </thead>
                     <tbody id="equipmentTableBody">
                         <tr>
-                            <td colspan="5">Loading equipment...</td>
+                            <td colspan="7">Loading equipment...</td>
                         </tr>
                     </tbody>
                 </table>
