@@ -58,7 +58,7 @@
                 <p>Enter the equipment details below.</p>
             </div>
 
-            <form action="/equipment" method="POST">
+            <form id="equipmentForm" action="/equipment" method="POST">
                 <div class="form-grid">
                     <div class="form-field">
                         <label for="brand">Brand</label>
@@ -70,6 +70,7 @@
                         <select id="deviceType" name="deviceType">
                             <option value="monitor">Monitor</option>
                             <option value="docking_station">Docking station</option>
+                            <option value="Laptop">Laptop</option>
                         </select>
                     </div>
 
@@ -102,6 +103,11 @@
                     <div class="form-field">
                         <label for="assignedTo">Assigned to</label>
                         <input type="text" id="assignedTo" name="assignedTo" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="warrantyExpiryDate">Warranty Expiry</label>
+                        <input type="date" id="warrantyExpiryDate" name="warrantyExpiryDate">
                     </div>
                 </div>
 
@@ -141,6 +147,7 @@
                             <th>Serial number</th>
                             <th>Service Tag</th>
                             <th>Assigned to</th>
+                            <th>Warranty Expiry</th>
                         </tr>
                     </thead>
                     <tbody id="equipmentTableBody">
@@ -150,6 +157,7 @@
                     </tbody>
                 </table>
             </div>
+
         </section>
 
         <footer class="site-footer">

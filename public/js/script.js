@@ -59,7 +59,55 @@ serialPhoto.addEventListener("change", async () => {
   }
 });
 
+const equipmentForm = document.getElementById("equipmentForm");
 
+equipmentForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const equipmentData = {
+        brand: document.getElementById("brand").value.trim(),
+        deviceType: document.getElementById("deviceType").value,
+        serialNumber: document.getElementById("serialNumber").value.trim(),
+        serviceTag: document.getElementById("serviceTag").value.trim(),
+        assignedTo: document.getElementById("assignedTo").value.trim(),
+        warrantyExpiryDate:
+            document.getElementById("warrantyExpiryDate").value || null
+    };
+
+    try {
+        const response = await fetch("/equipment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(equipmentData)
+        });
+
+        const responseBody = await response.text();
+
+        let result;
+        try {
+            result = JSON.parse(responseBody);
+        } catch {
+            result = { message: responseBody };
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result.error || result.message || "Unable to create equipment."
+            );
+        }
+
+        alert(result.message || "Equipment created successfully!");
+
+        equipmentForm.reset();
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Error creating equipment:", error);
+        alert(error.message);
+    }
+});
 
 async function loadEquipment() {
     const tableBody = document.getElementById("equipmentTableBody");
@@ -78,7 +126,7 @@ async function loadEquipment() {
             const row = tableBody.insertRow();
             const cell = row.insertCell();
 
-            cell.colSpan = 5;
+            cell.colSpan = 6;
             cell.textContent = searchInput.value.trim()
                 ? "No matching equipment found."
                 : "No equipment registered yet.";
@@ -96,7 +144,10 @@ async function loadEquipment() {
                     : device.device_type,
                 device.serial_number,
                 device.service_tag || "—",
-                device.assigned_to
+                device.assigned_to, 
+                device.warranty_expiry_date
+        ? String(device.warranty_expiry_date).slice(0, 10).split("-").reverse().join("/")
+        : "—"
             ];
 
             values.forEach((value) => {
@@ -117,7 +168,10 @@ async function loadEquipment() {
                     : device.device_type,
                 device.serial_number,
                 device.service_tag,
-                device.assigned_to
+                device.assigned_to,
+                device.warranty_expiry_date
+        ? String(device.warranty_expiry_date).slice(0, 10).split("-").reverse().join("/")
+        : "—"
             ];
 
             return searchableValues.some((value) =>
@@ -148,7 +202,7 @@ async function loadEquipment() {
         const row = tableBody.insertRow();
         const cell = row.insertCell();
 
-        cell.colSpan = 5;
+        cell.colSpan = 6;
         cell.textContent = "Unable to load equipment. Please try again.";
     }
 }

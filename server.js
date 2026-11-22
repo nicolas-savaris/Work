@@ -192,7 +192,7 @@ app.get("/equipment", async (req, res, next) => {
     try {
         const result = await pool.query(
             `SELECT id, brand, device_type, serial_number,
-                    service_tag, assigned_to
+                    service_tag, assigned_to, warranty_expiry_date
              FROM equipment
              ORDER BY id DESC`
         );
@@ -210,7 +210,8 @@ app.post("/equipment", async (req, res, next) => {
         deviceType,
         serialNumber,
         serviceTag,
-        assignedTo
+        assignedTo,
+        warrantyExpiryDate
     } = req.body;
 
     if (
@@ -230,16 +231,41 @@ app.post("/equipment", async (req, res, next) => {
     try {
         await pool.query(
             `INSERT INTO equipment
-                (brand, device_type, service_tag, serial_number, assigned_to)
-             VALUES ($1, $2, $3, $4, $5)`,
+                (brand, device_type, service_tag, serial_number, assigned_to, warranty_expiry_date)
+             VALUES ($1, $2, $3, $4, $5, $6)`,
             [
                 brand.trim(),
                 deviceType,
                 serviceTag?.trim() || null,
                 serialNumber.trim(),
-                assignedTo.trim()
+                assignedTo.trim(),
+                warrantyExpiryDate || null
             ]
         );
+            if (
+        warrantyExpiryDate &&
+        !/^\d{4}-\d{2}-\d{2}$/.test(warrantyExpiryDate)
+    ) {
+        return res.status(400).json({
+            error: "Invalid warranty expiration date."
+        });
+    }
+            if (warrantyExpiryDate) {
+            const [year, month, day] = warrantyExpiryDate.split("-").map(Number);
+
+            const date = new Date(Date.UTC(year, month - 1, day));
+
+            const isValidDate =
+                date.getUTCFullYear() === year &&
+                date.getUTCMonth() === month - 1 &&
+                date.getUTCDate() === day;
+
+            if (!isValidDate) {
+                return res.status(400).json({
+                    error: "Invalid calendar date."
+                });
+            }
+        }
 
         res.status(201).send("Equipment added successfully!");
     } catch (error) {
