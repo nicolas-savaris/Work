@@ -7,6 +7,10 @@ const username = process.env.OPERATOR_USERNAME;
 const password = process.env.OPERATOR_PASSWORD;
 
 try {
+    if (!username || !password) {
+        throw new Error("Operator credentials are missing from .env");
+    }
+
     const passwordHash = await bcrypt.hash(password, 12);
 
     await pool.query(
@@ -17,9 +21,11 @@ try {
     );
 
     console.log("Operator test account created or already exists.");
+
 } catch (error) {
-    console.error("Unable to create operator account.");
+    console.error("Unable to create operator account:", error.message);
     process.exitCode = 1;
+
 } finally {
     await pool.end();
 }
